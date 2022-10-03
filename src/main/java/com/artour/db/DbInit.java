@@ -3,6 +3,7 @@ package com.artour.db;
 import com.artour.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -15,42 +16,44 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DbInit implements CommandLineRunner {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
-        User artour = new User(
-                "artour",
-                "artour",
-                "artour",
-                33,
-                "x@gmail.com",
-                "USER",
-                "");
+        userRepository.deleteAll();
         User admin = new User(
                 "admin",
-                "admin",
+                passwordEncoder.encode("admin"),
                 "admin",
                 33,
                 "admin@gmail.com",
                 "ADMIN",
                 "ACCESS_TEST1, ACCESS_TEST2");
-        User manager = new User(
-                "manager",
-                "manager",
-                "manager",
+        User manager1 = new User(
+                "manager1",
+                passwordEncoder.encode("manager1"),
+                "manager1",
                 33,
                 "manager@gmail.com",
                 "MANAGER",
                 "ACCESS_TEST1");
+        User manager2 = new User(
+                "manager2",
+                passwordEncoder.encode("manager2"),
+                "manager2",
+                33,
+                "manager2@gmail.com",
+                "MANAGER",
+                "ACCESS_TEST2");
         User user = new User(
                 "user",
-                "user",
+                passwordEncoder.encode("user"),
                 "user",
                 33,
                 "user@gmail.com",
                 "USER",
                 "");
-        List<User> users = Arrays.asList(artour, admin, manager, user);
+        List<User> users = Arrays.asList(admin, manager1, manager2, user);
         userRepository.saveAll(users);
     }
 }
